@@ -28,17 +28,17 @@ def br():
 
     paths = [
             '/api/v1/status/',
-            '/api/v1/unauthorized/', 
+            '/api/v1/unauthorized/',
             '/api/v1/forbidden/'
     ]
     if not auth.require_auth(request.path, paths):
         return None
 
-    if auth.authorization_header(request) == None:
+    if auth.authorization_header(request) is None:
         abort(401)
         return None
 
-    if auth.current_user(request) == None: 
+    if auth.current_user(request) is None:
         abort(403)
 
 
