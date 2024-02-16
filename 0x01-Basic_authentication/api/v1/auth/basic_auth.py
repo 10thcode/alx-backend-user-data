@@ -4,6 +4,8 @@ Defines BasicAuth class
 """
 from api.v1.auth.auth import Auth
 import base64
+from models.user import User
+from typing import TypeVar
 
 
 class BasicAuth(Auth):
@@ -57,3 +59,20 @@ class BasicAuth(Auth):
             return (None, None)
 
         return tuple(d.split(":"))
+
+    def user_object_from_credentials(self, email: str,
+                                     pwd: str) -> TypeVar('User'):
+        """
+        Gets the User instance based on his email and password.
+        """
+        if email is None or type(email) is not str:
+            return None
+
+        if pwd is None or type(pwd) is not str:
+            return None
+
+        user = User.search({"email": email})
+        if user and user[0].is_valid_password(pwd):
+            return user[0]
+
+        return None
