@@ -3,6 +3,7 @@
 Defines BasicAuth class
 """
 from api.v1.auth.auth import Auth
+import base64
 
 
 class BasicAuth(Auth):
@@ -25,3 +26,19 @@ class BasicAuth(Auth):
             return None
 
         return authorization_header[6:]
+
+    def decode_base64_authorization_header(self, b: str) -> str:
+        """
+        Gets the decoded value of a Base64 string
+        base64_authorization_header
+        """
+        if b is None:
+            return None
+
+        if type(b) is not str:
+            return None
+
+        try:
+            return base64.b64decode(b).decode('utf-8')
+        except Exception:
+            return None
