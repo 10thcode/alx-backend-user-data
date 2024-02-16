@@ -58,7 +58,7 @@ class BasicAuth(Auth):
         if ":" not in d:
             return (None, None)
 
-        return tuple(d.split(":"))
+        return d[:d.index(':')], d[d.index(':') + 1:]
 
     def user_object_from_credentials(self, email: str,
                                      pwd: str) -> TypeVar('User'):
