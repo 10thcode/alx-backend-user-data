@@ -26,3 +26,15 @@ class SessionAuth(Auth):
         self.user_id_by_session_id[sid] = user_id
 
         return sid
+
+    def user_id_for_session_id(self, session_id: str = None) -> str:
+        """
+        Gets a User ID
+        """
+        if session_id is None:
+            return None
+
+        if not type(session_id) is str:
+            return None
+
+        return self.user_id_by_session_id.get(session_id)
