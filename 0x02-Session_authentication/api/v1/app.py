@@ -47,6 +47,7 @@ def br():
 
     request.current_user = auth.current_user(request)
 
+
 @app.errorhandler(404)
 def not_found(error) -> str:
     """ Not found handler
