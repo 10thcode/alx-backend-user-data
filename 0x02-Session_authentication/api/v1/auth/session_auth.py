@@ -38,3 +38,12 @@ class SessionAuth(Auth):
             return None
 
         return self.user_id_by_session_id.get(session_id)
+
+    def current_user(self, request=None):
+        """
+        Gets user instance
+        """
+        sid = self.session_cookie(request)
+        uid = self.user_id_for_session_id(sid)
+
+        return (User.get(uid))
