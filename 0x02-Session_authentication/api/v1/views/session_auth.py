@@ -11,10 +11,10 @@ import os
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
 def login() -> str:
     """
-    GET /api/v1/auth_session/login
+    POST /api/v1/auth_session/login
 
     Return:
-      - the status of the API
+      - login to API
     """
     email = request.form.get("email")
     password = request.form.get("password")
@@ -40,3 +40,21 @@ def login() -> str:
     user.set_cookie(os.getenv("SESSION_NAME"), sid)
 
     return user
+
+
+@app_views.route('/auth_session/logout',
+                 methods=['DELETE'],
+                 strict_slashes=False)
+def delete():
+    """
+    DELETE /api/v1/auth_session/logout
+
+    Return:
+      - logout from API
+    """
+    from api.v1.app import auth
+
+    if auth.destroy_session(request):
+        return jsonify({}), 200
+
+    abort(404)
