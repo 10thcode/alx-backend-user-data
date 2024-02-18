@@ -48,7 +48,7 @@ class SessionDBAuth(SessionExpAuth):
 
         if (exp - datetime.now()).total_seconds() < 0:
             session.remove()
-            del(self.user_id_by_session_id[session_id])
+            del self.user_id_by_session_id[session_id]
             return None
 
         return session.user_id
