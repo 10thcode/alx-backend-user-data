@@ -6,7 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from sqlalchemy.exc import InvalidRequestError
-from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.orm.exc import NoResultFound, UnmappedColumnError
 from typing import Any, Optional
 
 from user import Base, User
@@ -52,7 +52,7 @@ class DB:
         for k, v in kwargs.items():
             try:
                 query = query.filter(getattr(User, k) == v)
-            except AttributeError:
+            except (AttributeError, UnmappedColumnError):
                 raise InvalidRequestError
 
         return query.one()
