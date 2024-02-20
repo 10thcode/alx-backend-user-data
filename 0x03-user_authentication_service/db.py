@@ -55,7 +55,12 @@ class DB:
             except (AttributeError, UnmappedColumnError):
                 raise InvalidRequestError
 
-        return query.one()
+        user = query.first()
+
+        if user:
+            return user
+        else:
+            raise NoResultFound
 
     def update_user(self, user_id: int, **kwargs: Any) -> None:
         """
