@@ -20,7 +20,7 @@ def _hash_password(password: str) -> bytes:
 
 def _generate_uuid() -> str:
     """
-    Generates a new UUID  and adding more documentation.
+    This method generates a uuid and returns it.
     """
     return str(uuid4())
 
