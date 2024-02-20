@@ -20,7 +20,7 @@ def _hash_password(password: str) -> bytes:
 
 def _generate_uuid() -> str:
     """
-    This method generates a uuid and returns it.
+    This method generates a uuid and returns it
     """
     return str(uuid4())
 
@@ -41,11 +41,10 @@ class Auth:
         """
         try:
             self._db.find_user_by(email=email)
+            raise ValueError("User {} already exists".format(email))
         except NoResultFound:
             hashed_pwd = _hash_password(password)
-            user = self._db.add_user(email, hashed_pwd)
-        else:
-            raise ValueError("User {} already exists".format(email))
+            user = self._db.add_user(email, hashed_pwd.decode())
 
         return user
 
