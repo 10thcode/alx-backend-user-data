@@ -43,7 +43,7 @@ class DB:
         session.commit()
         return user
 
-    def find_user_by(self, **kwargs: Any) -> User:
+    def find_user_by(self, **kwargs: dict) -> User:
         """
         Gets the first row found in the users table
         """
