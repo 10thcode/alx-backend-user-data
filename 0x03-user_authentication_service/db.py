@@ -43,7 +43,7 @@ class DB:
         session.commit()
         return user
 
-    def find_user_by(self, **kwargs: dict) -> User:
+    def find_user_by(self, **kwargs: Any) -> User:
         """
         Gets the first row found in the users table
         """
@@ -61,6 +61,8 @@ class DB:
             return user
         else:
             raise NoResultFound
+
+        session.close()
 
     def update_user(self, user_id: int, **kwargs: Any) -> None:
         """
