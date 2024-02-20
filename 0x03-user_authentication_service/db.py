@@ -6,8 +6,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from sqlalchemy.exc import InvalidRequestError
-from sqlalchemy.orm.exc import NoResultFound, UnmappedColumnError
-from typing import Any, Optional
+from sqlalchemy.orm.exc import NoResultFound
+from typing import Optional, Any
 
 from user import Base, User
 
@@ -22,7 +22,7 @@ class DB:
         self._engine = create_engine("sqlite:///a.db", echo=False)
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
-        self.__session: Optional[Session] = None
+        self.__session: Any = None
 
     @property
     def _session(self) -> Any:
@@ -52,17 +52,10 @@ class DB:
         for k, v in kwargs.items():
             try:
                 query = query.filter(getattr(User, k) == v)
-            except (AttributeError, UnmappedColumnError):
+            except AttributeError:
                 raise InvalidRequestError
 
-        user = query.first()
-
-        if user:
-            return user
-        else:
-            raise NoResultFound
-
-        session.close()
+        return query.one()
 
     def update_user(self, user_id: int, **kwargs: Any) -> None:
         """
