@@ -2,7 +2,7 @@
 """
 defines filter_datum function
 """
-from typing import List
+from typing import List, Tuple
 import re
 import logging
 
@@ -45,3 +45,20 @@ def filter_datum(fields: List[str],
                              new_message)
 
     return new_message
+
+
+PII_FIELDS: Tuple = ("name", "email", "phone", "ssn", "password")
+
+
+def get_logger() -> logging.Logger:
+    """
+    Gets a logger object.
+    """
+    logger = logging.getLogger("user_data")
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+    handler = logging.StreamHandler()
+    handler.setFormatter(RedactingFormatter(list(PII_FIELDS)))
+    logger.addHandler(handler)
+
+    return logger
