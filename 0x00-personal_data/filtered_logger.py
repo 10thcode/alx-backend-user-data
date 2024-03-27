@@ -2,9 +2,12 @@
 """
 defines filter_datum function
 """
-from typing import List, Tuple
+from typing import List, Tuple, Any
 import re
 import logging
+from datetime import datetime
+import os
+import mysql.connector
 
 
 class RedactingFormatter(logging.Formatter):
@@ -62,3 +65,35 @@ def get_logger() -> logging.Logger:
     logger.addHandler(handler)
 
     return logger
+
+
+def get_db() -> Any:
+    """
+    Gets a a connector to the database.
+    """
+    username = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
+    password = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
+    host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
+    db = os.getenv("PERSONAL_DATA_DB_NAME")
+
+    return mysql.connector.connect(host=host,
+                                   database=db,
+                                   user=username,
+                                   password=password)
+
+
+def main() -> None:
+    """
+    Log records fetched from the database.
+    """
+    columns = ["name", "email", "phone", "ssn",
+               "password", "ip", "last_login", "user_agent"]
+    logger = get_logger()
+
+    with get_db() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM users;")
+
+
+if __name__ == "__main__":
+    main()
